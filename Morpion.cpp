@@ -10,6 +10,89 @@
 #include <format> 
 #include <vtkNamedColors.h>
 #include <vtkProperty.h>
+#include <vtkCallbackCommand.h>
+
+
+
+// Container to store actors will need that later for the game
+std::vector<vtkSmartPointer<vtkActor>> actors;
+bool is_Red = false;
+void is_Winner()
+{
+    if (actors[0]->GetProperty()->GetColor() == actors[1]->GetProperty()->GetColor() && actors[0]->GetProperty()->GetColor() == actors[2]->GetProperty()->GetColor())
+    {
+        cout << "winner winner chicken dinner ! ";
+    }
+}
+void change_color(int i) 
+{
+    vtkActor* actor;
+    vtkNew<vtkNamedColors> colors;
+    
+    if (is_Red)
+    {
+        actors[i]->GetProperty()->SetColor(colors->GetColor3d("Blue").GetData());
+        cout << "this is " << actors[i]->GetProperty()->GetColor() << endl;
+        is_Red = false;
+    }
+    else
+    {
+        actors[i]->GetProperty()->SetColor(colors->GetColor3d("Red").GetData());
+        cout << "this is " << actors[i]->GetProperty()->GetColor() << endl;
+        is_Red = true;
+    }
+    is_Winner();
+
+
+
+}
+
+
+void HandleKeyPress(vtkObject* caller, long unsigned int eventId, void* clientData, void* callData)
+{
+    vtkRenderWindowInteractor* interactor = static_cast<vtkRenderWindowInteractor*>(caller);
+    std::string key = interactor->GetKeySym();
+
+    if (key == "1") {
+        //MovePawn(0, 1.25); // Déplace la dame vers le haut
+        change_color(0);
+    }
+    else if (key == "4") {
+        change_color(1);
+       // MovePawn(0, -1.25); // Déplace la dame vers le bas
+    }
+    else if (key == "7") {
+        change_color(2);
+       // MovePawn(-1.25, 0); // Déplace la dame vers la gauche
+    }
+    else if (key == "2") {
+        change_color(3);
+        //MovePawn(1.25, 0); // Déplace la dame vers la droite
+    }
+    else if (key == "5") {
+        change_color(4);
+        // MovePawn(0, -1.25); // Déplace la dame vers le bas
+    }
+    else if (key == "8") {
+        change_color(5);
+        // MovePawn(-1.25, 0); // Déplace la dame vers la gauche
+    }
+    else if (key == "3") {
+        change_color(6);
+        //MovePawn(1.25, 0); // Déplace la dame vers la droite
+    }
+    else if (key == "6") {
+        change_color(7);
+        // MovePawn(-1.25, 0); // Déplace la dame vers la gauche
+    }
+    else if (key == "9") {
+        change_color(8);
+        //MovePawn(1.25, 0); // Déplace la dame vers la droite
+    }
+
+    interactor->GetRenderWindow()->Render();
+
+}
 
 int main() {
     // Create renderer
@@ -33,8 +116,7 @@ int main() {
     // espace entre chaque carré
     double spacing = 0.01;
 
-    // Container to store actors will need that later for the game
-    std::vector<vtkSmartPointer<vtkActor>> actors;
+    
 
     // Loop to create a 3x3 grid of squares with size and spacing
     for (int i = 0; i < 3; i++) {
@@ -85,12 +167,20 @@ int main() {
         std::cout << i << ' '; // print all the actors
     std::cout << actors[0] << endl;
     // for test purposes color the square
-    vtkNew<vtkNamedColors> colors;
-    actors[3]->GetProperty()->SetColor(colors->GetColor3d("Red").GetData());
+    //vtkNew<vtkNamedColors> colors;
+    //actors[3]->GetProperty()->SetColor(colors->GetColor3d("Red").GetData());
 
     // Disable interactor style interactions (no rotation, zoom, etc.)
     vtkSmartPointer<vtkInteractorStyle> style = vtkSmartPointer<vtkInteractorStyle>::New();
     renderWindowInteractor->SetInteractorStyle(style);
+
+
+    // Utilise vtkCallbackCommand pour gérer les événements clavier
+    vtkSmartPointer<vtkCallbackCommand> keyPressCallback = vtkSmartPointer<vtkCallbackCommand>::New();
+    keyPressCallback->SetCallback(HandleKeyPress);
+
+    renderWindowInteractor->AddObserver(vtkCommand::KeyPressEvent, keyPressCallback);
+
 
     // Render the scene
     renderWindow->Render();
