@@ -12,6 +12,8 @@
 #include <vtkProperty.h>
 #include <vtkCallbackCommand.h>
 #include <vector>
+#include <vtkTextActor.h>
+#include <vtkTextProperty.h>
 
 
 // Container to store actors will need that later for the game
@@ -19,6 +21,9 @@ std::vector<vtkSmartPointer<vtkActor>> actors;
 bool is_Red = false;
 std::vector<std::string> actors_Colors(10);
 
+// Initialize Scores 
+int red_Score = 0;
+int blue_Score = 0;
 
 void restart_Game()
 {
@@ -224,6 +229,45 @@ int main() {
     // for test purposes color the square
     //vtkNew<vtkNamedColors> colors;
     //actors[3]->GetProperty()->SetColor(colors->GetColor3d("Red").GetData());
+
+
+
+
+
+    // Create a text actor for the title 
+    vtkSmartPointer<vtkTextActor> TitleActor = vtkSmartPointer<vtkTextActor>::New();
+    vtkSmartPointer<vtkTextProperty> textTitleProperty = TitleActor->GetTextProperty();
+    TitleActor->SetTextScaleModeToNone(); // Disable text scaling
+
+    TitleActor->SetPosition(175, 800); // Set the position of the text
+    textTitleProperty->SetFontSize(24);
+    // Set the text
+    TitleActor->SetInput(" Welcome to TicTacToe Game, Made by Sam :)");
+    renderer->AddActor(TitleActor);
+
+    // Create a text actor for the RED PLAYER score
+    vtkSmartPointer<vtkTextActor> redScoreActor = vtkSmartPointer<vtkTextActor>::New();
+    vtkSmartPointer<vtkTextProperty> redScoretextProperty = redScoreActor->GetTextProperty();
+    redScoreActor->SetTextScaleModeToNone(); // Disable text scaling
+
+    redScoreActor->SetPosition(50, 750); // Set the position of the text
+    redScoretextProperty->SetFontSize(24);
+    redScoretextProperty->SetColor(1.0, 0.0, 0.0); // White text color
+    // Set the text
+    redScoreActor->SetInput("Red player score : ");
+    renderer->AddActor(redScoreActor);
+
+    // Create a text actor for the BLUE PLAYER score 
+    vtkSmartPointer<vtkTextActor> blueScoreActor = vtkSmartPointer<vtkTextActor>::New();
+    vtkSmartPointer<vtkTextProperty> blueScoretextProperty = blueScoreActor->GetTextProperty();
+    blueScoreActor->SetTextScaleModeToNone(); // Disable text scaling
+
+    blueScoreActor->SetPosition(600, 750); // Set the position of the text
+    blueScoretextProperty->SetFontSize(24);
+    blueScoretextProperty->SetColor(0.0, 0.0, 1.0); // White text color
+    // Set the text
+    blueScoreActor->SetInput("Blue player score : ");
+    renderer->AddActor(blueScoreActor);
 
     // Disable interactor style interactions (no rotation, zoom, etc.)
     vtkSmartPointer<vtkInteractorStyle> style = vtkSmartPointer<vtkInteractorStyle>::New();
