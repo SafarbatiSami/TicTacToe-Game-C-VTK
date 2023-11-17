@@ -11,42 +11,97 @@
 #include <vtkNamedColors.h>
 #include <vtkProperty.h>
 #include <vtkCallbackCommand.h>
-
+#include <vector>
 
 
 // Container to store actors will need that later for the game
 std::vector<vtkSmartPointer<vtkActor>> actors;
 bool is_Red = false;
+std::vector<std::string> actors_Colors(10);
+
+
+void restart_Game()
+{
+
+}
 void is_Winner()
 {
-    if (actors[0]->GetProperty()->GetColor() == actors[1]->GetProperty()->GetColor() && actors[0]->GetProperty()->GetColor() == actors[2]->GetProperty()->GetColor())
+    if (actors_Colors[0] == actors_Colors[1] && actors_Colors[0]== actors_Colors[2] && (actors_Colors[0] == "Red" || actors_Colors[0] == "Blue") )
     {
-        cout << "winner winner chicken dinner ! ";
+        cout << "winner winner chicken dinner ! "<<endl;
+        cout << actors_Colors[1] << " PLAYER IS THE MVP !";
+    }
+    if (actors_Colors[3] == actors_Colors[4] && actors_Colors[3] == actors_Colors[5] && (actors_Colors[3] == "Red" || actors_Colors[3] == "Blue"))
+    {
+        cout << "winner winner chicken dinner ! " << endl;
+        cout << actors_Colors[3] << " PLAYER IS THE MVP !";
+    }
+    if (actors_Colors[6] == actors_Colors[7] && actors_Colors[6] == actors_Colors[8] && (actors_Colors[6] == "Red" || actors_Colors[6] == "Blue"))
+    {
+        cout << "winner winner chicken dinner ! " << endl;
+        cout << actors_Colors[6] << " PLAYER IS THE MVP !";
+    }
+    if (actors_Colors[0] == actors_Colors[3] && actors_Colors[0] == actors_Colors[6] && (actors_Colors[0] == "Red" || actors_Colors[0] == "Blue"))
+    {
+        cout << "winner winner chicken dinner ! " << endl;
+        cout << actors_Colors[0] << " PLAYER IS THE MVP !";
+    }
+    if (actors_Colors[1] == actors_Colors[4] && actors_Colors[1] == actors_Colors[7] && (actors_Colors[1] == "Red" || actors_Colors[1] == "Blue"))
+    {
+        cout << "winner winner chicken dinner ! " << endl;
+        cout << actors_Colors[1] << " PLAYER IS THE MVP !";
+    }
+    if (actors_Colors[2] == actors_Colors[5] && actors_Colors[2] == actors_Colors[8] && (actors_Colors[2] == "Red" || actors_Colors[2] == "Blue"))
+    {
+        cout << "winner winner chicken dinner ! " << endl;
+        cout << actors_Colors[2] << " PLAYER IS THE MVP !";
+    }
+    if (actors_Colors[0] == actors_Colors[4] && actors_Colors[0] == actors_Colors[8] && (actors_Colors[0] == "Red" || actors_Colors[0] == "Blue"))
+    {
+        cout << "winner winner chicken dinner ! " << endl;
+        cout << actors_Colors[0] << " PLAYER IS THE MVP !";
+    }
+    if (actors_Colors[2] == actors_Colors[4] && actors_Colors[2] == actors_Colors[6] && (actors_Colors[2] == "Red" || actors_Colors[2] == "Blue"))
+    {
+        cout << "winner winner chicken dinner ! " << endl;
+        cout << actors_Colors[2] << " PLAYER IS THE MVP !";
     }
 }
 void change_color(int i) 
 {
-    vtkActor* actor;
+    vtkActor* actor = nullptr;
     vtkNew<vtkNamedColors> colors;
-    
-    if (is_Red)
+    if (actors_Colors[i] != "Red" && actors_Colors[i] != "Blue")
     {
+        if (is_Red)
+    {
+        // test for test 
+        // test if colored in Red before painting
+       
         actors[i]->GetProperty()->SetColor(colors->GetColor3d("Blue").GetData());
-        cout << "this is " << actors[i]->GetProperty()->GetColor() << endl;
+    
+        actors_Colors.at(i) = "Blue";
+        cout << "this is " << actors_Colors[i] << endl;
         is_Red = false;
+        
     }
     else
     {
+        // test if colored in Blue before painting
+        
         actors[i]->GetProperty()->SetColor(colors->GetColor3d("Red").GetData());
-        cout << "this is " << actors[i]->GetProperty()->GetColor() << endl;
+        
+        actors_Colors.at(i) = "Red";
+        cout << "this is " << actors_Colors[i] << endl;
         is_Red = true;
+        
     }
+    }
+
+    
     is_Winner();
 
-
-
 }
-
 
 void HandleKeyPress(vtkObject* caller, long unsigned int eventId, void* clientData, void* callData)
 {
@@ -54,40 +109,40 @@ void HandleKeyPress(vtkObject* caller, long unsigned int eventId, void* clientDa
     std::string key = interactor->GetKeySym();
 
     if (key == "1") {
-        //MovePawn(0, 1.25); // Déplace la dame vers le haut
-        change_color(0);
+     
+        change_color(0); // Change the color of the square
     }
     else if (key == "4") {
-        change_color(1);
-       // MovePawn(0, -1.25); // Déplace la dame vers le bas
+        change_color(1); // Change the color of the square 
+       
     }
     else if (key == "7") {
-        change_color(2);
-       // MovePawn(-1.25, 0); // Déplace la dame vers la gauche
+        change_color(2); // Change the color of the square
+       
     }
     else if (key == "2") {
-        change_color(3);
-        //MovePawn(1.25, 0); // Déplace la dame vers la droite
+        change_color(3); // Change the color of the square
+       
     }
     else if (key == "5") {
-        change_color(4);
-        // MovePawn(0, -1.25); // Déplace la dame vers le bas
+        change_color(4); // Change the color of the square 
+        
     }
     else if (key == "8") {
-        change_color(5);
-        // MovePawn(-1.25, 0); // Déplace la dame vers la gauche
+        change_color(5); // Change the color of the square
+       
     }
     else if (key == "3") {
-        change_color(6);
-        //MovePawn(1.25, 0); // Déplace la dame vers la droite
+        change_color(6); // Change the color of the square
+        
     }
     else if (key == "6") {
-        change_color(7);
-        // MovePawn(-1.25, 0); // Déplace la dame vers la gauche
+        change_color(7); // Change the color of the square
+       
     }
     else if (key == "9") {
-        change_color(8);
-        //MovePawn(1.25, 0); // Déplace la dame vers la droite
+        change_color(8); // Change the color of the square
+       
     }
 
     interactor->GetRenderWindow()->Render();
