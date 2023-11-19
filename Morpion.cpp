@@ -16,65 +16,112 @@
 #include <vtkTextProperty.h>
 
 
+// ----------------------------------- SOME GLOBAL DECLARATIONS --------------------------------------------
+
 // Container to store actors will need that later for the game
 std::vector<vtkSmartPointer<vtkActor>> actors;
 bool is_Red = false;
-std::vector<std::string> actors_Colors(10);
+std::vector<std::string> actors_Colors(11);
 
 // Initialize Scores 
 int red_Score = 0;
 int blue_Score = 0;
 
-void restart_Game()
+// Create text Actors for the scores
+vtkSmartPointer<vtkTextActor> redScoreActor = vtkSmartPointer<vtkTextActor>::New();
+vtkSmartPointer<vtkTextActor> blueScoreActor = vtkSmartPointer<vtkTextActor>::New();
+
+// Create render window
+vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+
+// ---------------------------------------------------------------------------------------------------------
+
+
+void restart_Game(std::string which_color_won)
 {
+    vtkNew<vtkNamedColors> colors;
+
+    // Increment score for the winner 
+    if (which_color_won == "Red")
+    {
+        red_Score += 1;
+    }
+    if (which_color_won == "Blue")
+    {
+        blue_Score += 1;
+    }
+    for (int i{}; i < actors.size() ; ++i) actors[i]->GetProperty()->SetColor(colors->GetColor3d("White").GetData());
+    for (int i{}; i < actors_Colors.size(); ++i) actors_Colors[i] = "White";
+
+    
+    // Update the text for the RED PLAYER score
+    std::string red_scoreString = "Red player score : " + std::to_string(red_Score);
+    redScoreActor->SetInput(red_scoreString.c_str());
+
+    // Update the text for the BLUE PLAYER score
+    std::string blue_scoreString = "Blue player score : " + std::to_string(blue_Score);
+    blueScoreActor->SetInput(blue_scoreString.c_str());
+    cout << "New Game Started ! " << endl;
+    // Trigger a render update
+    renderWindow->Render();
 
 }
+
 void is_Winner()
 {
     if (actors_Colors[0] == actors_Colors[1] && actors_Colors[0]== actors_Colors[2] && (actors_Colors[0] == "Red" || actors_Colors[0] == "Blue") )
     {
         cout << "winner winner chicken dinner ! "<<endl;
-        cout << actors_Colors[1] << " PLAYER IS THE MVP !";
+        cout << actors_Colors[1] << " PLAYER IS THE MVP !" << endl;
+        restart_Game(actors_Colors[1]);
     }
     if (actors_Colors[3] == actors_Colors[4] && actors_Colors[3] == actors_Colors[5] && (actors_Colors[3] == "Red" || actors_Colors[3] == "Blue"))
     {
         cout << "winner winner chicken dinner ! " << endl;
-        cout << actors_Colors[3] << " PLAYER IS THE MVP !";
+        cout << actors_Colors[3] << " PLAYER IS THE MVP !" << endl;
+        restart_Game(actors_Colors[3]);
     }
     if (actors_Colors[6] == actors_Colors[7] && actors_Colors[6] == actors_Colors[8] && (actors_Colors[6] == "Red" || actors_Colors[6] == "Blue"))
     {
         cout << "winner winner chicken dinner ! " << endl;
-        cout << actors_Colors[6] << " PLAYER IS THE MVP !";
+        cout << actors_Colors[6] << " PLAYER IS THE MVP !" << endl;
+        restart_Game(actors_Colors[6]);
     }
     if (actors_Colors[0] == actors_Colors[3] && actors_Colors[0] == actors_Colors[6] && (actors_Colors[0] == "Red" || actors_Colors[0] == "Blue"))
     {
         cout << "winner winner chicken dinner ! " << endl;
-        cout << actors_Colors[0] << " PLAYER IS THE MVP !";
+        cout << actors_Colors[0] << " PLAYER IS THE MVP !" << endl;
+        restart_Game(actors_Colors[0]);
     }
     if (actors_Colors[1] == actors_Colors[4] && actors_Colors[1] == actors_Colors[7] && (actors_Colors[1] == "Red" || actors_Colors[1] == "Blue"))
     {
         cout << "winner winner chicken dinner ! " << endl;
-        cout << actors_Colors[1] << " PLAYER IS THE MVP !";
+        cout << actors_Colors[1] << " PLAYER IS THE MVP !" << endl;
+        restart_Game(actors_Colors[1]);
     }
     if (actors_Colors[2] == actors_Colors[5] && actors_Colors[2] == actors_Colors[8] && (actors_Colors[2] == "Red" || actors_Colors[2] == "Blue"))
     {
         cout << "winner winner chicken dinner ! " << endl;
-        cout << actors_Colors[2] << " PLAYER IS THE MVP !";
+        cout << actors_Colors[2] << " PLAYER IS THE MVP !" << endl;
+        restart_Game(actors_Colors[2]);
     }
     if (actors_Colors[0] == actors_Colors[4] && actors_Colors[0] == actors_Colors[8] && (actors_Colors[0] == "Red" || actors_Colors[0] == "Blue"))
     {
         cout << "winner winner chicken dinner ! " << endl;
-        cout << actors_Colors[0] << " PLAYER IS THE MVP !";
+        cout << actors_Colors[0] << " PLAYER IS THE MVP !" << endl;
+        restart_Game(actors_Colors[0]);
     }
     if (actors_Colors[2] == actors_Colors[4] && actors_Colors[2] == actors_Colors[6] && (actors_Colors[2] == "Red" || actors_Colors[2] == "Blue"))
     {
         cout << "winner winner chicken dinner ! " << endl;
-        cout << actors_Colors[2] << " PLAYER IS THE MVP !";
+        cout << actors_Colors[2] << " PLAYER IS THE MVP !" << endl;
+        restart_Game(actors_Colors[2]);
     }
 }
+
 void change_color(int i) 
 {
-    vtkActor* actor = nullptr;
+   // vtkActor* actor = nullptr;
     vtkNew<vtkNamedColors> colors;
     if (actors_Colors[i] != "Red" && actors_Colors[i] != "Blue")
     {
@@ -86,7 +133,7 @@ void change_color(int i)
         actors[i]->GetProperty()->SetColor(colors->GetColor3d("Blue").GetData());
     
         actors_Colors.at(i) = "Blue";
-        cout << "this is " << actors_Colors[i] << endl;
+        //cout << "this is " << actors_Colors[i] << endl;
         is_Red = false;
         
     }
@@ -97,13 +144,12 @@ void change_color(int i)
         actors[i]->GetProperty()->SetColor(colors->GetColor3d("Red").GetData());
         
         actors_Colors.at(i) = "Red";
-        cout << "this is " << actors_Colors[i] << endl;
+       // cout << "this is " << actors_Colors[i] << endl;
         is_Red = true;
         
     }
     }
-
-    
+   
     is_Winner();
 
 }
@@ -158,8 +204,6 @@ int main() {
     // Create renderer
     vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
 
-    // Create render window
-    vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
     renderWindow->AddRenderer(renderer);
 
     // Create render window interactor
@@ -175,8 +219,7 @@ int main() {
 
     // espace entre chaque carré
     double spacing = 0.01;
-
-    
+ 
 
     // Loop to create a 3x3 grid of squares with size and spacing
     for (int i = 0; i < 3; i++) {
@@ -222,18 +265,9 @@ int main() {
     //
     
 
-    // for testing purposes
-    for (vtkSmartPointer<vtkActor> i : actors)
-        std::cout << i << ' '; // print all the actors
-    std::cout << actors[0] << endl;
-    // for test purposes color the square
-    //vtkNew<vtkNamedColors> colors;
-    //actors[3]->GetProperty()->SetColor(colors->GetColor3d("Red").GetData());
-
-
-
-
-
+    // Welcome Message
+    std::cout << " The Game Started ! Enjoy " << endl;
+   
     // Create a text actor for the title 
     vtkSmartPointer<vtkTextActor> TitleActor = vtkSmartPointer<vtkTextActor>::New();
     vtkSmartPointer<vtkTextProperty> textTitleProperty = TitleActor->GetTextProperty();
@@ -246,19 +280,21 @@ int main() {
     renderer->AddActor(TitleActor);
 
     // Create a text actor for the RED PLAYER score
-    vtkSmartPointer<vtkTextActor> redScoreActor = vtkSmartPointer<vtkTextActor>::New();
+
     vtkSmartPointer<vtkTextProperty> redScoretextProperty = redScoreActor->GetTextProperty();
     redScoreActor->SetTextScaleModeToNone(); // Disable text scaling
 
     redScoreActor->SetPosition(50, 750); // Set the position of the text
     redScoretextProperty->SetFontSize(24);
     redScoretextProperty->SetColor(1.0, 0.0, 0.0); // White text color
+
     // Set the text
-    redScoreActor->SetInput("Red player score : ");
+    std::string red_scoreString = "Red player score : " + std::to_string(blue_Score);
+    redScoreActor->SetInput(red_scoreString.c_str());
     renderer->AddActor(redScoreActor);
 
     // Create a text actor for the BLUE PLAYER score 
-    vtkSmartPointer<vtkTextActor> blueScoreActor = vtkSmartPointer<vtkTextActor>::New();
+   
     vtkSmartPointer<vtkTextProperty> blueScoretextProperty = blueScoreActor->GetTextProperty();
     blueScoreActor->SetTextScaleModeToNone(); // Disable text scaling
 
@@ -266,7 +302,9 @@ int main() {
     blueScoretextProperty->SetFontSize(24);
     blueScoretextProperty->SetColor(0.0, 0.0, 1.0); // White text color
     // Set the text
-    blueScoreActor->SetInput("Blue player score : ");
+    //blueScoreActor->SetInput("Blue player score : ");
+    std::string blue_scoreString = "Blue player score : " + std::to_string(blue_Score);
+    blueScoreActor->SetInput(blue_scoreString.c_str());
     renderer->AddActor(blueScoreActor);
 
     // Disable interactor style interactions (no rotation, zoom, etc.)
