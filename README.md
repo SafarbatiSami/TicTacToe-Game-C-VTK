@@ -2,8 +2,9 @@
 
 
 This is a simple TicTacToe game implemented in C++ using the Visualization Toolkit (VTK). The game is played on a 3x3 grid of squares, and players take turns marking their symbol (Red or Blue) in an attempt to win the game.
-
-![TicTacToe Game](https://github.com/SafarbatiSami/TicTacToe-Game-C-VTK/blob/master/gameplay.png)
+<p align="middle">
+  <img src="https://github.com/SafarbatiSami/TicTacToe-Game-C-VTK/blob/master/gameplay.png" alt="UCA" width="600">
+</p>
 
 ## How to Play
 
@@ -68,3 +69,7 @@ This is a simple TicTacToe game implemented in C++ using the Visualization Toolk
 
 Enjoy playing TicTacToe with VTK! 
 For Any information, **Contact Me :** samsafarbati@hotmail.com
+
+<p align="left">
+  <img src="https://github.com/SafarbatiSami/TicTacToe-Game-C-VTK/blob/master/logo_UCA.jpg" alt="UCA" width="300">
+</p>
